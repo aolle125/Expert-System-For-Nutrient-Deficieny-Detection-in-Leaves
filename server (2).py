@@ -69,18 +69,6 @@ blue = Decimal(features[15])
 gbyr = Decimal(features[16])
 gbyb = Decimal(features[17])
 
-#
-#
-# wb = load_workbook('sample.xlsx',keep_vba=True,data_only=True)
-# sheet =wb.active
-# rows = ((red, green, blue,gbyr,gbyb),)
-#
-#
-# for row in rows:
-#      sheet.append(row)
-#
-# wb.save("sample.xlsx")
-#
 
 df1=pd.read_csv("/home/mustafa/Downloads/new_data.csv")
 
@@ -111,17 +99,14 @@ clef.fit(X, y)
 classifier = RandomForestClassifier(n_estimators=3,random_state=45)
 classifier.fit(X_train, y_train)
 y_pred = clef.predict([[red,green,blue,gbyr,gbyb]])
-#y_pred = classifier.predict([[idm,mean,stdx,stdy,correlation,contrast,energy,entropy,homogenity,shade,prominence,inertia]])
-#y_pred = neigh.predict([[idm,mean,stdx,stdy,correlation,contrast,energy,entropy,homogenity,shade,prominence,inertia]])
-#Reverse factorize (converting y_pred from 0s,1s and 2s to Iris-setosa, Iris-versicolor and Iris-virginica
+y_pred = classifier.predict([[idm,mean,stdx,stdy,correlation,contrast,energy,entropy,homogenity,shade,prominence,inertia]])
+y_pred = neigh.predict([[idm,mean,stdx,stdy,correlation,contrast,energy,entropy,homogenity,shade,prominence,inertia]])
 reversefactor = dict(zip(range(3),definitions))
 y_test = np.vectorize(reversefactor.get)(y_test)
 y_pred = np.vectorize(reversefactor.get)(y_pred)
-# # Making the Confusion Matrix
-# #print(pd.crosstab(y_test, y_pred))
+
 print(y_pred)
-# #print(accuracy_score(y_test, y_pred,normalize=True))
-# answer = y_pred
+print(accuracy_score(y_test, y_pred,normalize=True))
 conn.sendall(y_pred)
 conn.close()
 s.close()
